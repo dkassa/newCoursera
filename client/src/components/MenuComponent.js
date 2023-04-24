@@ -11,7 +11,7 @@ import { baseUrl } from '../shared/baseUrl';
             <Card>
                 
                 <Link to={`/menu/${dish._id}`} >
-                    <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name} />
+                    <CardImg width="100%" crossOrigin="anonymous" src={baseUrl + dish.image} alt={dish.name} />
                     <CardImgOverlay>
                         <CardTitle>{dish.name}</CardTitle>
                     </CardImgOverlay>

@@ -7,6 +7,7 @@ import { Control, LocalForm } from 'react-redux-form';
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
 import { FadeTransform, Fade, Stagger } from 'react-animation-components';
+import { deleteFavorite } from '../redux/ActionCreators';
 
     function RenderDish({dish, favorite, postFavorite}) {
             return(
@@ -16,7 +17,7 @@ import { FadeTransform, Fade, Stagger } from 'react-animation-components';
                             exitTransform: 'scale(0.5) translateY(-50%)'
                         }}>
                         <Card>
-                            <CardImg top src={baseUrl + dish.image} alt={dish.name} />
+                            <CardImg top crossOrigin="anonymous" src={baseUrl + dish.image} alt={dish.name} />
                             <CardImgOverlay>
                                 <Button outline color="primary" onClick={() => (favorite.dishId !== null && favorite.dishId !== undefined) ? console.log('Already favorite') : postFavorite(dish._id)}>
                                     {(favorite.dishId) ?
@@ -43,7 +44,7 @@ import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
     }
 
-    function RenderComments({comments, postComment, dishId}) {
+    function RenderComments({comments, postComment, deleteComment,dishId}) {
         if (comments != null)
             return(
                 <div className="col-12 col-md-5 m-1">
@@ -59,6 +60,7 @@ import { FadeTransform, Fade, Stagger } from 'react-animation-components';
                                         <p>{comment.rating} stars</p>
                                         <p>-- {comment.author.username} {comment.author.lastname} , {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day:'2-digit'}).format(new Date(Date.parse(comment.updatedAt)))}</p>
                                         </li>
+                                        <Button color="danger" onClick={() => (comment._id == null && comment._id == undefined) ? console.log('cant find it') : deleteComment(comment._id)}>Delete</Button>
                                     </Fade>
                                 );
                             })}
@@ -99,6 +101,8 @@ import { FadeTransform, Fade, Stagger } from 'react-animation-components';
         }
     
         render() {
+
+           
             return(
             <div>
                 <Button outline onClick={this.toggleModal}><span className="fa fa-pencil fa-lg"></span> Submit Comment</Button>
@@ -138,6 +142,8 @@ import { FadeTransform, Fade, Stagger } from 'react-animation-components';
     }
 
     const DishDetail = (props) => {
+
+        console.log(props)
         if (props.isLoading) {
             return(
                 <div className="container">
@@ -173,6 +179,7 @@ import { FadeTransform, Fade, Stagger } from 'react-animation-components';
                         <RenderDish dish={props.dish} favorite={props.favorite} postFavorite={props.postFavorite} />
                         <RenderComments comments={props.comments}
                             postComment={props.postComment}
+                            deleteComment={props.deleteComment}
                             dishId={props.dish._id} />
                     </div>
                 </div>

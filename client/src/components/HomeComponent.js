@@ -25,7 +25,7 @@ function RenderCard({ item, isLoading, errMess }) {
         >
           
           <Card>
-            <CardImg src={baseUrl + item.image} alt={item.name} />
+            <CardImg crossOrigin="anonymous" src={baseUrl + item.image} alt={item.name} />
             <CardBody>
               <CardTitle>{item.name}</CardTitle>
               {item.designation ? (

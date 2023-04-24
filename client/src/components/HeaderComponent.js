@@ -25,6 +25,7 @@ class Header extends Component {
         this.setState({
             isNavOpen: !this.state.isNavOpen
         });
+      
     }
 
     toggleModal() {
@@ -56,13 +57,14 @@ class Header extends Component {
     }
 
     render() {
+        console.log(this.props)
         return(
             <React.Fragment>
                 <Navbar dark expand="md">
                     <div className="container">
                         <NavbarToggler onClick={this.toggleNav} />
                         <NavbarBrand className="mr-auto" href="/">
-                            <img src="assets/images/logo.png" height="30" width="41"
+                            <img crossOrigin="anonymous" src="assets/images/logo.png" height="30" width="41"
                                 alt="Ristorante Con Fusion" />
                         </NavbarBrand>
                         <Collapse isOpen={this.state.isNavOpen} navbar>
@@ -105,6 +107,16 @@ class Header extends Component {
                                         <span className="fa fa-address-card fa-lg"></span> Carttwo
                                     </NavLink>
                                 </NavItem>
+
+                               {
+                               this.props.auth.isAuthenticated ? (<NavItem>
+                                    <NavLink className="nav-link" to="/dishes">
+                                        <span className="fa fa-address-card fa-lg"></span> Add dish
+                                    </NavLink>
+                                </NavItem>): <p style={{"color":"white"}}>sign in to add dish</p>
+                                
+                                
+                                }
                             </Nav>
                             <Nav className="ml-auto" navbar>
                                 <NavItem>

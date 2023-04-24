@@ -10,13 +10,17 @@ import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Feed from './Feeddetail'
 import Carttwo from './CookieCart';
+import Newdish from './Newdish';
+import {Link} from "react-router-dom"
+
 import ConfigureStore from '../redux/configureStore';
 
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { postComment, postFeedback,fetchDishes,fetchComments, FetchHcart,fetchPromos, fetchLeaders, loginUser, addProfile, logoutUser, fetchFavorites, postFavorite, deleteFavorite, fetchCarts,  postCart,deleteCart,signupUser, fetchFeedback, fetchcart, addToCart } from '../redux/ActionCreators';
+import { postComment, postFeedback,fetchDishes,fetchComments, createDishes,FetchHcart,fetchPromos, deleteComment,fetchLeaders, loginUser, addProfile, logoutUser, fetchFavorites, postFavorite, deleteFavorite, fetchCarts,  postCart,deleteCart,signupUser, fetchFeedback, fetchcart, addToCart } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+
 
 
 
@@ -52,9 +56,11 @@ const mapDispatchToProps = (dispatch) => ({
   postFavorite: (dishId) => dispatch(postFavorite(dishId)),
   postCart: (dishId) => dispatch(postCart(dishId)),
   fetchFeedback:()=>dispatch(fetchFeedback()),
+  deleteComment: (commentId) => dispatch(deleteComment(commentId)),
   deleteFavorite: (dishId) => dispatch(deleteFavorite(dishId)),
   deleteCart: (dishId) => dispatch(deleteCart(dishId)),
-  FetchHcart:()=>dispatch(addToCart())
+  FetchHcart:()=>dispatch(addToCart()),
+  createDishes:()=>dispatch(createDishes())
 });
 
 class Main extends Component {
@@ -72,6 +78,7 @@ class Main extends Component {
   }
 
   render() {
+    console.log(this.props.location)
     const caart=(id)=>{
       
       let tempCart=[...this.props.carts];
@@ -91,6 +98,12 @@ class Main extends Component {
         carts={this.props.carts} deleteCart={this.props.deleteCart}
         
         />
+      )
+    }
+
+    const newdish=()=>{
+      return (
+        <Newdish />
       )
     }
 
@@ -121,6 +134,7 @@ class Main extends Component {
                   <DishDetail dish={this.props.dishes.dishes.filter((dish) => dish._id === match.params.dishId)[0]}
                       isLoading={this.props.dishes.isLoading}
                       errMess={this.props.dishes.errMess}
+                      deleteComment={this.props.deleteComment}
                       comments={this.props.comments.comments.filter((comment) => comment.dish === match.params.dishId)}
                       commentsErrMess={this.props.comments.errMess}
                       postComment={this.props.postComment}
@@ -135,6 +149,7 @@ class Main extends Component {
                       isLoading={this.props.dishes.isLoading}
                       errMess={this.props.dishes.errMess}
                       comments={this.props.comments.comments.filter((comment) => comment.dish === match.params.dishId)}
+                      deleteComment={this.props.deleteComment}
                       commentsErrMess={this.props.comments.errMess}
                       postComment={this.props.postComment}
                       favorite={false}
@@ -158,11 +173,11 @@ class Main extends Component {
 
     return (
       <div>
-        <Header auth={this.props.auth} 
+       { (this.props.location.pathname !== "/dishes") ? <Header auth={this.props.auth} 
           loginUser={this.props.loginUser}
           signupUser={this.props.signupUser} 
           logoutUser={this.props.logoutUser} 
-          />   
+          /> : null}
         <TransitionGroup>
           <CSSTransition key={this.props.location.key} classNames="page" timeout={300}>
             <Switch>
@@ -174,6 +189,7 @@ class Main extends Component {
       
               <Route path="/menu/:dishId" component={DishWithId} />
               <PrivateRoute exact path="/favorites" component={() => <Favorites favorites={this.props.favorites} deleteFavorite={this.props.deleteFavorite} />} />
+              <Route exact path="/dishes" component={newdish} />
               <Route exact path="/Carttwo" component={()=> <Carttwo CCarts={this.props.CCarts}  FetchHcart={this.props.FetchHcart}/> } />
               <Route exact path="/contactus" component={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} postFeedback={this.props.postFeedback} feedbacks={this.props.feedbacks}/>} />
               <Route exact path="/feedus" component={() => <Feed  fetchFeedback={this.props.fetchFeedback} feedbacks={this.props.feedbacks} />} />
@@ -181,7 +197,7 @@ class Main extends Component {
             </Switch>
           </CSSTransition>
         </TransitionGroup>
-        <Footer />
+         {(this.props.location.pathname !=="/dishes") ? <Footer /> : null }
       </div>
     );
   }
