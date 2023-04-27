@@ -6,11 +6,6 @@ export const addComment = (comment) => ({
     payload: comment
 });
 
-export const deletecomment=(commentId) =>({
-    type: ActionTypes.DELETE_COMMENT,
-    payload: commentId
-})
-
 export const postComment = (dishId, rating, comment) => (dispatch) => {
 
     const newComment = {
@@ -51,38 +46,6 @@ export const postComment = (dishId, rating, comment) => (dispatch) => {
         alert('Your comment could not be posted\nError: '+ error.message); })
 }
 
-
-// delete comment
-
-export const deleteComment = (commentId) => (dispatch) => {
-
-    const bearer = 'Bearer ' + localStorage.getItem('token');
-
-    return fetch(baseUrl + 'comments/' + commentId, {
-        method: "DELETE",
-        headers: {
-          'Authorization': bearer
-        },
-        credentials: "same-origin"
-    })
-    .then(response => {
-        if (response.ok) {
-          return response;
-        } else {
-          var error = new Error('Error ' + response.status + ': ' + response.statusText);
-          error.response = response;
-          throw error;
-        }
-      },
-      error => {
-            throw error;
-      })
-    .then(response => response.json())
-    .then(comments => dispatch(addComment(comments)))
-    .catch(error => dispatch(favoritesFailed(error.message)));
-};
-
-
 export const fetchDishes = () => (dispatch) => {
     dispatch(dishesLoading(true));
 
@@ -102,7 +65,7 @@ export const fetchDishes = () => (dispatch) => {
             throw errmess;
         })
         .then(response => response.json())
-        .then(dishes =>dispatch(addDishes(dishes)))
+        .then(dishes => dispatch(addDishes(dishes)))
         .catch(error => dispatch(dishesFailed(error.message)));
 }
 
@@ -119,11 +82,6 @@ export const addDishes = (dishes) => ({
     type: ActionTypes.ADD_DISHES,
     payload: dishes
 });
-
-
-
-
-
 
 export const fetchComments = () => (dispatch) => {
     return fetch(baseUrl + 'comments')
@@ -230,31 +188,8 @@ export const addLeaders = (leaders) => ({
     payload: leaders
 });
 
-
-export const requestFeedback = (feedback) => {
-    return {
-        type: ActionTypes.FEEDBACK_REQUEST,
-        payload:feedback
-    }
-}
-  
-export const recieveFeedback = (response) => {
-    return {
-        type: ActionTypes.FEEDBACK_SUCCESS,
-        payload:response
-    }
-}
-  
-export const feedbackError = (message) => {
-    return {
-        type: ActionTypes.FEEDBACK_FAILURE,
-        payload: message
-    }
-
-}
-
 export const postFeedback = (feedback) => (dispatch) => {
-        //dispatch(requestFeedback(feedback))
+        
     return fetch(baseUrl + 'feedback', {
         method: "POST",
         body: JSON.stringify(feedback),
@@ -276,9 +211,8 @@ export const postFeedback = (feedback) => (dispatch) => {
             throw error;
       })
     .then(response => response.json())
-    .then(response => dispatch(recieveFeedback(response)))
-    //{ console.log('Feedback', response); alert('Thank you for your feedback!\n'+JSON.stringify(response)); })
-    .catch((error) =>  { console.log('Feedback', error.message); alert('Your feedback could not be posted\nError: '+error.message); });
+    .then(response => { console.log('Feedback', response); alert('Thank you for your feedback!\n'+JSON.stringify(response)); })
+    .catch(error =>  { console.log('Feedback', error.message); alert('Your feedback could not be posted\nError: '+error.message); });
 };
 
 export const requestLogin = (creds) => {
@@ -343,80 +277,6 @@ export const loginUser = (creds) => (dispatch) => {
     })
     .catch(error => dispatch(loginError(error.message)))
 };
-
-export const addProfile = (user) => {
-    return {
-        type: ActionTypes.ADD_USER,
-        payload: { user }
-    }
-}
-
-export const requestSignup =(creds)=>{
-    return{
-        type:ActionTypes.SIGNUP_REQUEST,
-        payload:creds
-    }
-}
-
-export const Signupsucess=(resp)=>{
-    return{
-        type:ActionTypes.SIGNUP_SUCCESS,
-        payload:resp
-    }
-}
-export const signupError = (message) => {
-    return {
-        type: ActionTypes.SIGNUP_FAILURE,
-        payload: message
-    }
-}
-export const signupUser = (creds) => (dispatch) => {
-    // We dispatch requestsignup to kickoff the call to the API
-    console.log(creds)
-    dispatch(requestSignup(creds))
-    return fetch(baseUrl + 'users/signup', {
-        method: 'POST',
-        body: JSON.stringify(creds),
-        headers: { 
-            'Content-Type':'application/json' 
-        },
-        credentials:'same-origin'
-    })
-    .then(response => {
-        console.log(response)
-        if (response.ok) {
-            return response;
-        } else {
-            var error = new Error('Error ' + response.status + ': ' + response.statusText);
-            error.response = response;
-            console.log(error)
-            throw error;
-            
-        }
-        },
-        error => {
-            throw error;
-            
-        })
-    .then(response => response.json())
-    .then(response => {
-        if (response.success) {
-            // If signup was successful, set the token in local storage
-            localStorage.setItem('token',response.token)
-            localStorage.setItem('creds', JSON.stringify(creds));            
-        }
-        else {
-            var error = new Error('Error ' + response.status);
-            error.response = response;
-            throw error;
-        }
-    })    
-    .then(response => response.json())
-    .then(resp => 
-        
-        dispatch(Signupsucess(resp)))
-    .catch(error => dispatch(signupError(error.message)))
-}; 
 
 export const requestLogout = () => {
     return {
@@ -539,231 +399,3 @@ export const addFavorites = (favorites) => ({
     type: ActionTypes.ADD_FAVORITES,
     payload: favorites
 });
-
-
-
-export const fetchFeedback = () => (dispatch) => {
-    dispatch(feedbackLoading(true));
-
-    return fetch(baseUrl + 'feedback')
-        .then(response => {
-            if (response.ok) {
-                return response;
-            }
-            else {
-                var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                error.response = response;
-                throw error;
-            }
-        },
-        error => {
-            var errmess = new Error(error.message);
-            throw errmess;
-        })
-        .then(response => response.json())
-        .then(feedbacks => dispatch(addFeedback(feedbacks)))
-        .catch(error => dispatch(feedbackFailed(error.message)));
-}
-
-export const feedbackLoading = () => ({
-    type: ActionTypes.FEED_LOADING
-});
-
-export const feedbackFailed = (errmess) => ({
-    type: ActionTypes.FEED_FAILED,
-    payload: errmess
-});
-
-export const addFeedback = (feedbacks) => ({
-    type: ActionTypes.ADD_FEEDS,
-    payload: feedbacks
-});
-
-
-export const postCart = (dishId) => (dispatch) => {
-
-    const bearer = 'Bearer ' + localStorage.getItem('token');
-
-    return fetch(baseUrl + 'carts/' + dishId, {
-        method: "POST",
-        body: JSON.stringify({"_id": dishId}),
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': bearer
-        },
-        credentials: "same-origin"
-    })
-    .then(response => {
-        if (response.ok) {
-          return response;
-        } else {
-          var error = new Error('Error ' + response.status + ': ' + response.statusText);
-          error.response = response;
-          throw error;
-        }
-      },
-      error => {
-            throw error;
-      })
-    .then(response => response.json())
-    .then(carts => { console.log('Carts Added', carts); dispatch(addCarts(carts)); })
-    .catch(error => dispatch(cartsFailed(error.message)));
-}
-
-export const cartsLoading = () => ({
-    type: ActionTypes.CARTS_LOADING
-});
-
-
-export const cartsFailed = (errmess) => ({
-    type: ActionTypes.CARTS_FAILED,
-    payload: errmess
-});
-
-export const addCarts = (carts) => ({
-    type: ActionTypes.ADD_CARTS,
-    payload: carts
-});
-
-
-export const fetchCarts = () => (dispatch) => {
-    dispatch(cartsLoading(true));
-
-    const bearer = 'Bearer ' + localStorage.getItem('token');
-
-    return fetch(baseUrl + 'carts', {
-        headers: {
-            'Authorization': bearer
-        },
-    })
-    .then(response => {
-        if (response.ok) {
-            return response;
-        }
-        else {
-            var error = new Error('Error ' + response.status + ': ' + response.statusText);
-            error.response = response;
-            throw error;
-        }
-    },
-    error => {
-        var errmess = new Error(error.message);
-        throw errmess;
-    })
-    .then(response => response.json())
-    .then(carts => dispatch(addCarts(carts)))
-    .catch(error => dispatch(favoritesFailed(error.message)));
-}
-
-
-export const deleteCart = (cartId) => (dispatch) => {
-
-    const bearer = 'Bearer ' + localStorage.getItem('token');
-
-    return fetch(baseUrl + 'carts/' + cartId, {
-        method: "DELETE",
-        headers: {
-          'Authorization': bearer
-        },
-        credentials: "same-origin"
-    })
-    .then(response => {
-        if (response.ok) {
-          return response;
-        } else {
-          var error = new Error('Error ' + response.status + ': ' + response.statusText);
-          error.response = response;
-          throw error;
-        }
-      },
-      error => {
-            throw error;
-      })
-    .then(response => response.json())
-    .then(carts => { console.log('Cart Deleted', carts); dispatch(addCarts(carts)); })
-    .catch(error => dispatch(cartsFailed(error.message)));
-};
-
-
-export const FetchHcart=()=>(dispatch)=>{
-    
-   
-    return addToCart()
-}
-
-export const addToCart = (storagecart) => ({
-    type: ActionTypes.ADD_CARTSS,
-    payload: storagecart
-});
-
-
-// add dishes
-
-export const createDishes = (dishinfo) => (dispatch) => {
-    // We dispatch requestsignup to kickoff the call to the API
-    console.log(dishinfo)
-    dispatch(requestcreateDishes(dishinfo))
-    return fetch(baseUrl + 'dishes', {
-        method: 'POST',
-        body: JSON.stringify(dishinfo),
-        headers: { 
-            'Content-Type':'application/json' 
-        },
-        credentials:'same-origin'
-    })
-    .then(response => {
-        console.log(response)
-        if (response.ok) {
-            return response;
-        } else {
-            var error = new Error('Error ' + response.status + ': ' + response.statusText);
-            error.response = response;
-            console.log(error)
-            throw error;
-            
-        }
-        },
-        error => {
-            throw error;
-            
-        })
-    .then(response => response.json())
-    .then(response => {
-        if (response.success) {
-            // If signup was successful, set the token in local storage
-            console.log(response)           
-        }
-        else {
-            var error = new Error('Error ' + response.status);
-            error.response = response;
-            throw error;
-        }
-    })    
-    .then(response => response.json())
-    .then(resp => 
-        
-        dispatch(createDishesSuccess(resp)))
-    .catch(error => dispatch(createDishesError(error.message)))
-}; 
-
-
-export const requestcreateDishes = () => ({
-    type: ActionTypes.CREATEDISHES_LOADING
-});
-
-export const createDishesError = (errmess) => ({
-    type: ActionTypes.CREATEDISHSES_FAILED,
-    payload: errmess
-});
-
-export const createDishesSuccess = (favorites) => ({
-    type: ActionTypes.CREATE_DISHES,
-    payload: favorites
-});
-
-
-
-
-
-
-

@@ -1,4 +1,3 @@
-import { Signupsucess } from './ActionCreators';
 import * as ActionTypes from './ActionTypes';
 
 // The auth reducer. The starting state sets authentication
@@ -7,7 +6,7 @@ import * as ActionTypes from './ActionTypes';
 export const Auth = (state = {
         isLoading: false,
         isAuthenticated: localStorage.getItem('token') ? true : false,
-        token: localStorage.getItem('token'),        
+        token: localStorage.getItem('token'),
         user: localStorage.getItem('creds') ? JSON.parse(localStorage.getItem('creds')) : null,
         errMess: null
     }, action) => {
@@ -26,23 +25,6 @@ export const Auth = (state = {
                 token: action.token
             };
         case ActionTypes.LOGIN_FAILURE:
-            return {...state,
-                isLoading: false,
-                isAuthenticated: false,
-                errMess: action.message
-            };        
-         case ActionTypes.SIGNUP_REQUEST:
-            return {...state,
-                isLoading: true,
-                isAuthenticated: false,
-                user: action.payload.newUser
-            };
-        
-            case ActionTypes.SIGNUP_SUCCESS:
-                return {
-                    ...state,isLoading:false,isAuthenticated:true,user:action.payload.newUser
-                };
-                case ActionTypes.SIGNUP_FAILURE:
             return {...state,
                 isLoading: false,
                 isAuthenticated: false,

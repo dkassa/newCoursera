@@ -3,18 +3,17 @@ import * as ActionTypes from './ActionTypes';
 export const Dishes = (state = {
         isLoading: true,
         errMess: null,
-        dishes: [],
-        dishesFeatured:[]
+        dishes: []
     }, action) => {
     switch(action.type) {
         case ActionTypes.ADD_DISHES:
-            return {...state, isLoading: false, errMess: null, dishes: action.payload, dishesFeatured: action.payload.filter((dish)=>dish.featured)};
+            return {...state, isLoading: false, errMess: null, dishes: action.payload};
 
         case ActionTypes.DISHES_LOADING:
-            return {...state, isLoading: true, errMess: null, dishes: [],dishesFeatured:[]};
+            return {...state, isLoading: true, errMess: null, dishes: []};
 
         case ActionTypes.DISHES_FAILED:
-            return {...state, isLoading: false, errMess: action.payload, dishes: [],dishesFeatured:[]};
+            return {...state, isLoading: false, errMess: action.payload, dishes: []};
 
         default:
             return state;

@@ -7,7 +7,6 @@ import { Control, LocalForm } from 'react-redux-form';
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
 import { FadeTransform, Fade, Stagger } from 'react-animation-components';
-import { deleteFavorite } from '../redux/ActionCreators';
 
     function RenderDish({dish, favorite, postFavorite}) {
             return(
@@ -17,20 +16,14 @@ import { deleteFavorite } from '../redux/ActionCreators';
                             exitTransform: 'scale(0.5) translateY(-50%)'
                         }}>
                         <Card>
-                            <CardImg top crossOrigin="anonymous" src={baseUrl + dish.image} alt={dish.name} />
+                            <CardImg top src={baseUrl + dish.image} alt={dish.name} />
                             <CardImgOverlay>
-                                <Button outline color="primary" onClick={() => (favorite.dishId !== null && favorite.dishId !== undefined) ? console.log('Already favorite') : postFavorite(dish._id)}>
-                                    {(favorite.dishId) ?
+                                <Button outline color="primary" onClick={() => favorite ? console.log('Already favorite') : postFavorite(dish._id)}>
+                                    {favorite ?
                                         <span className="fa fa-heart"></span>
                                         : 
                                         <span className="fa fa-heart-o"></span>
                                     }
-                                </Button>
-
-                                <Button outline color="primary" onClick={() =>localStorage.setItem('carte',JSON.stringify(dish))  }>
-                                    
-                                        <span className="fa fa-shopping-cart">Carttwo</span>
-                         
                                 </Button>
                             </CardImgOverlay>
                             <CardBody>
@@ -44,23 +37,21 @@ import { deleteFavorite } from '../redux/ActionCreators';
 
     }
 
-    function RenderComments({comments, postComment, deleteComment,dishId}) {
+    function RenderComments({comments, postComment, dishId}) {
         if (comments != null)
             return(
                 <div className="col-12 col-md-5 m-1">
                     <h4>Comments</h4>
                     <ul className="list-unstyled">
                         <Stagger in>
-                            
                             {comments.map((comment) => {
                                 return (
                                     <Fade in key={comment._id}>
                                         <li>
                                         <p>{comment.comment}</p>
                                         <p>{comment.rating} stars</p>
-                                        <p>-- {comment.author.username} {comment.author.lastname} , {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day:'2-digit'}).format(new Date(Date.parse(comment.updatedAt)))}</p>
+                                        <p>-- {comment.author.firstname} {comment.author.lastname} , {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day:'2-digit'}).format(new Date(Date.parse(comment.updatedAt)))}</p>
                                         </li>
-                                        <Button color="danger" onClick={() => (comment._id == null && comment._id == undefined) ? console.log('cant find it') : deleteComment(comment._id)}>Delete</Button>
                                     </Fade>
                                 );
                             })}
@@ -101,8 +92,6 @@ import { deleteFavorite } from '../redux/ActionCreators';
         }
     
         render() {
-
-           
             return(
             <div>
                 <Button outline onClick={this.toggleModal}><span className="fa fa-pencil fa-lg"></span> Submit Comment</Button>
@@ -112,8 +101,8 @@ import { deleteFavorite } from '../redux/ActionCreators';
                     <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
                         <Row className="form-group">
                             <Col>
-                                        <Label htmlFor="rating">Rating</Label>
-                                        <Control.select model=".rating" id="rating" className="form-control" defaultValue="5">
+                            <Label htmlFor="rating">Rating</Label>
+                            <Control.select model=".rating" id="rating" className="form-control">
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
@@ -125,8 +114,8 @@ import { deleteFavorite } from '../redux/ActionCreators';
                         <Row className="form-group">
                             <Col>
                             <Label htmlFor="comment">Comment</Label>
-                                        <Control.textarea model=".comment" id="comment"
-                                            rows="6" className="form-control" defaultValue="Excellent Food" />
+                            <Control.textarea model=".comment" id="comment"
+                                        rows="6" className="form-control" />
                             </Col>
                         </Row>
                         <Button type="submit" className="bg-primary">
@@ -142,8 +131,6 @@ import { deleteFavorite } from '../redux/ActionCreators';
     }
 
     const DishDetail = (props) => {
-
-        console.log(props)
         if (props.isLoading) {
             return(
                 <div className="container">
@@ -179,7 +166,6 @@ import { deleteFavorite } from '../redux/ActionCreators';
                         <RenderDish dish={props.dish} favorite={props.favorite} postFavorite={props.postFavorite} />
                         <RenderComments comments={props.comments}
                             postComment={props.postComment}
-                            deleteComment={props.deleteComment}
                             dishId={props.dish._id} />
                     </div>
                 </div>
