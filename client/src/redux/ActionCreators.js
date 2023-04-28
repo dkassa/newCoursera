@@ -1,5 +1,8 @@
 import * as ActionTypes from './ActionTypes';
 
+const url='https://backend2-cwxf.onrender.com'
+
+
 
 export const addComment = (comment) => ({
     type: ActionTypes.ADD_COMMENT,
@@ -17,8 +20,7 @@ export const postComment = (dishId, rating, comment) => (dispatch) => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    const url="https://backend2-cwxf.onrender.com"
-
+    
     return fetch(url + 'comments', {
         method: 'POST',
         body: JSON.stringify(newComment),
