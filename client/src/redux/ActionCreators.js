@@ -1,5 +1,5 @@
 import * as ActionTypes from './ActionTypes';
-import { baseUrl } from '../shared/baseUrl';
+
 
 export const addComment = (comment) => ({
     type: ActionTypes.ADD_COMMENT,
@@ -17,7 +17,9 @@ export const postComment = (dishId, rating, comment) => (dispatch) => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(baseUrl + 'comments', {
+    const url="https://backend2-cwxf.onrender.com"
+
+    return fetch(url + 'comments', {
         method: 'POST',
         body: JSON.stringify(newComment),
         headers: {
@@ -49,7 +51,7 @@ export const postComment = (dishId, rating, comment) => (dispatch) => {
 export const fetchDishes = () => (dispatch) => {
     dispatch(dishesLoading(true));
 
-    return fetch(baseUrl + 'dishes')
+    return fetch(url + 'dishes')
         .then(response => {
             if (response.ok) {
                 return response;
@@ -84,7 +86,7 @@ export const addDishes = (dishes) => ({
 });
 
 export const fetchComments = () => (dispatch) => {
-    return fetch(baseUrl + 'comments')
+    return fetch(url + 'comments')
         .then(response => {
             if (response.ok) {
                 return response;
@@ -117,7 +119,7 @@ export const addComments = (comments) => ({
 export const fetchPromos = () => (dispatch) => {
     dispatch(promosLoading(true));
 
-    return fetch(baseUrl + 'promotions')
+    return fetch(url + 'promotions')
         .then(response => {
             if (response.ok) {
                 return response;
@@ -155,7 +157,7 @@ export const fetchLeaders = () => (dispatch) => {
     
     dispatch(leadersLoading());
 
-    return fetch(baseUrl + 'leaders')
+    return fetch(url + 'leaders')
     .then(response => {
         if (response.ok) {
             return response;
@@ -190,7 +192,7 @@ export const addLeaders = (leaders) => ({
 
 export const postFeedback = (feedback) => (dispatch) => {
         
-    return fetch(baseUrl + 'feedback', {
+    return fetch(url + 'feedback', {
         method: "POST",
         body: JSON.stringify(feedback),
         headers: {
@@ -240,7 +242,7 @@ export const loginUser = (creds) => (dispatch) => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin(creds))
 
-    return fetch(baseUrl + 'users/login', {
+    return fetch(url + 'users/login', {
         method: 'POST',
         headers: { 
             'Content-Type':'application/json' 
@@ -303,7 +305,7 @@ export const postFavorite = (dishId) => (dispatch) => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(baseUrl + 'favorites/' + dishId, {
+    return fetch(url + 'favorites/' + dishId, {
         method: "POST",
         body: JSON.stringify({"_id": dishId}),
         headers: {
@@ -333,7 +335,7 @@ export const deleteFavorite = (dishId) => (dispatch) => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(baseUrl + 'favorites/' + dishId, {
+    return fetch(url + 'favorites/' + dishId, {
         method: "DELETE",
         headers: {
           'Authorization': bearer
@@ -362,7 +364,7 @@ export const fetchFavorites = () => (dispatch) => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(baseUrl + 'favorites', {
+    return fetch(url + 'favorites', {
         headers: {
             'Authorization': bearer
         },
