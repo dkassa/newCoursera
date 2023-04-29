@@ -1,4 +1,5 @@
 var createError = require('http-errors');
+require("dotenv").config();
 
 var express = require('express');
 var path = require('path');
@@ -27,13 +28,11 @@ const Promotions = require('./models/promotions');
 const Favorite = require('./models/favourite');
 const Feedbacks = require('./models/feedback');
 const uploadRouter = require('./routes/uploadRouter');
-const url = config.mongo_URI;
-const connect = mongoose.connect(url);
 
-connect.then((db) => {
-    console.log("Connected correctly to server");
-}, (err) => { console.log(err); });
 
+// mongodb connection
+const connectDB = require("./config/db");
+connectDB();
 var app = express();
 
 
