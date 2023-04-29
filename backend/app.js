@@ -27,7 +27,7 @@ const Promotions = require('./models/promotions');
 const Favorite = require('./models/favourite');
 const Feedbacks = require('./models/feedback');
 const uploadRouter = require('./routes/uploadRouter');
-const url = config.mongoUrl;
+const url = config.mongo_URI;
 const connect = mongoose.connect(url);
 
 connect.then((db) => {
