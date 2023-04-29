@@ -27,7 +27,7 @@ const Promotions = require('./models/promotions');
 const Favorite = require('./models/favourite');
 const Feedbacks = require('./models/feedback');
 const uploadRouter = require('./routes/uploadRouter');
-const url = process.env.mongo_URI;
+const url = config.mongoUrl;
 const connect = mongoose.connect(url);
 
 connect.then((db) => {
@@ -66,7 +66,7 @@ app.use('/api/promotions', promoRouter);
 app.use('/api/leaders', leaderRouter);
 app.use('/api/imageUpload', uploadRouter);
 app.use('api/favorites', favoriteRouter);
-app.use('/api/carts',cartRouter);
+app.use('api/carts',cartRouter);
 
 
 // catch 404 and forward to error handler
