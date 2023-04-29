@@ -59,14 +59,14 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/dishes', dishRouter);
-app.use('/feedback', feedbackRouter);
-app.use('/comments', commentRouter);
-app.use('/promotions', promoRouter);
-app.use('/leaders', leaderRouter);
-app.use('/imageUpload', uploadRouter);
-app.use('/favorites', favoriteRouter);
-app.use('/carts',cartRouter);
+app.use('api/dishes', dishRouter);
+app.use('api/feedback', feedbackRouter);
+app.use('api/comments', commentRouter);
+app.use('api/promotions', promoRouter);
+app.use('api/leaders', leaderRouter);
+app.use('api/imageUpload', uploadRouter);
+app.use('api/favorites', favoriteRouter);
+app.use('api/carts',cartRouter);
 
 
 // catch 404 and forward to error handler
