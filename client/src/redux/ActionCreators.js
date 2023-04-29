@@ -1,6 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 
-const url='https://backend2-cwxf.onrender.com'
+const url='https://backend2-cwxf.onrender.com/'
 
 
 
