@@ -28,12 +28,12 @@ const Promotions = require('./models/promotions');
 const Favorite = require('./models/favourite');
 const Feedbacks = require('./models/feedback');
 const uploadRouter = require('./routes/uploadRouter');
-
+var app = express();
 
 // mongodb connection
 const connectDB = require("./config/db");
 connectDB();
-var app = express();
+
 
 
 /*app.all('*', (req, res, next) => {
