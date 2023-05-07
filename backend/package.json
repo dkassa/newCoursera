@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "seed:data": "node seeder/seeder",
+    "seed:data-d": "node seeder/seeder -d"
   },
   "dependencies": {
     "assert": "^1.4.1",
