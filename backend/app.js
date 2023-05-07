@@ -30,6 +30,8 @@ const Feedbacks = require('./models/feedback');
 const uploadRouter = require('./routes/uploadRouter');
 var app = express();
 
+
+
 // mongodb connection
 const connectDB = require("./config/db");
 connectDB();
@@ -55,7 +57,7 @@ app.use(express.urlencoded({ extended: false }));
 //app.use(cookieParser("12345-67890-09876-54321"));
 app.use(passport.initialize());
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('api/users', usersRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/dishes', dishRouter);
