@@ -403,3 +403,80 @@ export const addFavorites = (favorites) => ({
     type: ActionTypes.ADD_FAVORITES,
     payload: favorites
 });
+
+
+// signup
+
+export const addProfile = (user) => {
+    return {
+        type: ActionTypes.ADD_USER,
+        payload: { user }
+    }
+}
+
+export const requestSignup =(creds)=>{
+    return{
+        type:ActionTypes.SIGNUP_REQUEST,
+        payload:creds
+    }
+}
+
+export const Signupsucess=(resp)=>{
+    return{
+        type:ActionTypes.SIGNUP_SUCCESS,
+        payload:resp
+    }
+}
+export const signupError = (message) => {
+    return {
+        type: ActionTypes.SIGNUP_FAILURE,
+        payload: message
+    }
+}
+export const signupUser = (creds) => (dispatch) => {
+    // We dispatch requestsignup to kickoff the call to the API
+    console.log(creds)
+    dispatch(requestSignup(creds))
+    return fetch(baseUrl + 'users/signup', {
+        method: 'POST',
+        body: JSON.stringify(creds),
+        headers: { 
+            'Content-Type':'application/json' 
+        },
+        credentials:'same-origin'
+    })
+    .then(response => {
+        console.log(response)
+        if (response.ok) {
+            return response;
+        } else {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            console.log(error)
+            throw error;
+            
+        }
+        },
+        error => {
+            throw error;
+            
+        })
+    .then(response => response.json())
+    .then(response => {
+        if (response.success) {
+            // If signup was successful, set the token in local storage
+            localStorage.setItem('token',response.token)
+            localStorage.setItem('creds', JSON.stringify(creds));            
+        }
+        else {
+            var error = new Error('Error ' + response.status);
+            error.response = response;
+            throw error;
+        }
+    })    
+    .then(response => response.json())
+    .then(resp => 
+        
+        dispatch(Signupsucess(resp)))
+    .catch(error => dispatch(signupError(error.message)))
+}; 
