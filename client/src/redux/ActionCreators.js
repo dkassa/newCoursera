@@ -437,7 +437,7 @@ export const signupUser = (creds) => (dispatch) => {
     // We dispatch requestsignup to kickoff the call to the API
     console.log(creds)
     dispatch(requestSignup(creds))
-    return fetch(baseUrl + 'users/signup', {
+    return fetch(url + 'users/signup', {
         method: 'POST',
         body: JSON.stringify(creds),
         headers: { 
