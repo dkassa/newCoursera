@@ -20,6 +20,7 @@ var leaderRouter = require('./routes/leaderRouter');
 var favoriteRouter = require('./routes/favoriteRouter');
 var commentRouter = require('./routes/commentRouter');
 //const cors = require('cors');
+const cors = require('cors');
 const mongoose = require('mongoose');
 
 const Dishes = require('./models/dishes');
@@ -50,6 +51,7 @@ connectDB();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.use(cors());
 //app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
