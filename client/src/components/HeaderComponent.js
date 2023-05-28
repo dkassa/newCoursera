@@ -46,7 +46,7 @@ class Header extends Component {
     }
     handleSignup(event) {
         this.toggleModal2();
-        this.props.signupUser({username: this.username.value, password: this.password.value, firstname: this.firstname.value, lastname: this.lastname.value });
+        this.props.signupUser({firstname: this.firstname.value, lastname: this.lastname.value ,username: this.username.value, password: this.password.value,  });
         event.preventDefault();
 
     }
