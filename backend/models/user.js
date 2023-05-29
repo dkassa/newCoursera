@@ -11,6 +11,14 @@ var User = new Schema({
         type: String,
         default: ''
     },
+    username: {
+        type: String,
+        default: ""
+    },
+    password: {
+        type: String,
+        default: ""
+    },
     facebookId: String,
     admin: {
         type: Boolean,
