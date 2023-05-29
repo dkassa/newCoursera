@@ -108,6 +108,7 @@ class Main extends Component {
     return (
       <div>
         <Header auth={this.props.auth} 
+          signupUser={this.props.signupUser}
           loginUser={this.props.loginUser} 
           logoutUser={this.props.logoutUser} 
           />   
