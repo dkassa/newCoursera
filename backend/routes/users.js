@@ -32,7 +32,7 @@ router.post('signup',cors.corsWithOptions,async(req,res,next)=>{
       return res.status(400).send("All inputs are required");
     }
 
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ username });
     if (userExists) {
       return res.status(400).send("user exists");
     } else {
@@ -64,9 +64,9 @@ router.post('signup',cors.corsWithOptions,async(req,res,next)=>{
           success: "User created",
           userCreated: {
             _id: user._id,
-            name: user.name,
+            firstname: user.firstname,
             lastName: user.lastName,
-            email: user.email,
+            username: user.username,
             isAdmin: user.isAdmin,
           },
         });
