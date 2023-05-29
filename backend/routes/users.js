@@ -25,7 +25,7 @@ router.get('/', cors.corsWithOptions,  (req, res, next) => {
   })
 });
 
-router.post('signup',cors.corsWithOptions,async(req,res,next)=>{
+router.post('/signup',cors.corsWithOptions,async(req,res,next)=>{
   try {
     const { firstname, lastName, username, password } = req.body;
     if (!(firstname && lastName && email && password)) {
