@@ -35,12 +35,12 @@ export const Auth = (state = {
                 return {...state,
                     isLoading: true,
                     isAuthenticated: false,
-                    user: action.payload.newUser
+                    user: action.payload
                 };
             
                 case ActionTypes.SIGNUP_SUCCESS:
                     return {
-                        ...state,isLoading:false,isAuthenticated:true,user:action.payload.newUser
+                        ...state,isLoading:false,isAuthenticated:true,user:action.payload
                     };
                     case ActionTypes.SIGNUP_FAILURE:
                 return {...state,
