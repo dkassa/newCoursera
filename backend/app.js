@@ -69,7 +69,7 @@ app.use('/api/comments', commentRouter);
 app.use('/api/promotions', promoRouter);
 app.use('/api/leaders', leaderRouter);
 app.use('/api/imageUpload', uploadRouter);
-app.use('api/favorites', favoriteRouter);
+app.use('/api/favorites', favoriteRouter);
 app.use('api/carts',cartRouter);
 
 
