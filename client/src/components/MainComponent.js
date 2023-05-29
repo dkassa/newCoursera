@@ -34,7 +34,7 @@ const mapDispatchToProps = (dispatch) => ({
   postFeedback: (feedback) => dispatch(postFeedback(feedback)),
   loginUser: (creds) => dispatch(loginUser(creds)),
   logoutUser: () => dispatch(logoutUser()),
-  signupUser: ()=>dispatch(signupUser),
+  signupUser: ()=>dispatch(signupUser()),
   fetchFavorites: () => dispatch(fetchFavorites()),
   postFavorite: (dishId) => dispatch(postFavorite(dishId)),
   deleteFavorite: (dishId) => dispatch(deleteFavorite(dishId))
