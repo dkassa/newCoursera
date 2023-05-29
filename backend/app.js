@@ -62,7 +62,7 @@ app.use('/', indexRouter);
 
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('api/users', usersRouter);
+app.use('/api/users', usersRouter);
 app.use('/api/dishes', dishRouter);
 app.use('/api/feedback', feedbackRouter);
 app.use('/api/comments', commentRouter);

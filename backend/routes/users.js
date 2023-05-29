@@ -25,7 +25,7 @@ router.get('/', cors.corsWithOptions,  (req, res, next) => {
   })
 });
 
-router.post('/signup',cors.corsWithOptions,async(req,res,next)=>{
+/*router.post('/signup',cors.corsWithOptions, async(req,res,next)=>{
   try {
     const { firstname, lastName, username, password } = req.body;
     if (!(firstname && lastName && email && password)) {
@@ -74,10 +74,10 @@ router.post('/signup',cors.corsWithOptions,async(req,res,next)=>{
   } catch (err) {
     next(err);
   }
-})
+})*/
 
 // sign up process
-/*router.post('/signup', cors.corsWithOptions, (req, res, next) => {
+router.post('/signup', cors.corsWithOptions, (req, res, next) => {
   User.register(new User({ username: req.body.username}),
     req.body.password,(err, user) => {
       if (err) {
@@ -105,12 +105,9 @@ router.post('/signup',cors.corsWithOptions,async(req,res,next)=>{
         });
       }
     });
-});*/
+});
 
 
-const registerUser = async (req, res, next) => {
-  
-};
 
 
 // login 
