@@ -35,18 +35,20 @@ export const Auth = (state = {
                 return {...state,
                     isLoading: true,
                     isAuthenticated: false,
-                    user: action.payload.creds
+                    user: action.creds
                 };
             
                 case ActionTypes.SIGNUP_SUCCESS:
                     return {
-                        ...state,isLoading:false,isAuthenticated:true,user:action.payload.creds
+                        ...state,isLoading:false,
+                        isAuthenticated:true,
+                        user:action.creds
                     };
                     case ActionTypes.SIGNUP_FAILURE:
                 return {...state,
                     isLoading: false,
                     isAuthenticated: false,
-                    errMess: action.payload.message
+                    errMess: action.message
                 };
         case ActionTypes.LOGOUT_REQUEST:
             return {...state,
