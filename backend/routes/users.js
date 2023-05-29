@@ -4,6 +4,9 @@ const passport = require('passport');
 const User = require('../models/user');
 const authenticate = require('../authenticate');
 const cors = require('./cors');
+const { hashPassword, comparePasswords } = require("../utils/hashPassword");
+const generateAuthToken = require("../utils/generateAuthToken");
+
 
 
 var router = express.Router();
@@ -22,8 +25,59 @@ router.get('/', cors.corsWithOptions,  (req, res, next) => {
   })
 });
 
+router.post('signup',cors.corsWithOptions,async(req,res,next)=>{
+  try {
+    const { firstname, lastName, username, password } = req.body;
+    if (!(firstname && lastName && email && password)) {
+      return res.status(400).send("All inputs are required");
+    }
+
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).send("user exists");
+    } else {
+      const hashedPassword = hashPassword(password);
+      const user = await User.create({
+        firstname,
+        lastName,
+        username: username.toLowerCase(),
+        password: hashedPassword,
+      });
+      res
+        .cookie(
+          "access_token",
+          generateAuthToken(
+            user._id,
+            user.firstname,
+            user.lastName,
+            user.username,
+            user.isAdmin
+          ),
+          {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+          }
+        )
+        .status(201)
+        .json({
+          success: "User created",
+          userCreated: {
+            _id: user._id,
+            name: user.name,
+            lastName: user.lastName,
+            email: user.email,
+            isAdmin: user.isAdmin,
+          },
+        });
+    }
+  } catch (err) {
+    next(err);
+  }
+})
+
 // sign up process
-router.post('/signup', cors.corsWithOptions, (req, res, next) => {
+/*router.post('/signup', cors.corsWithOptions, (req, res, next) => {
   User.register(new User({ username: req.body.username}),
     req.body.password,(err, user) => {
       if (err) {
@@ -51,7 +105,13 @@ router.post('/signup', cors.corsWithOptions, (req, res, next) => {
         });
       }
     });
-});
+});*/
+
+
+const registerUser = async (req, res, next) => {
+  
+};
+
 
 // login 
 router.post('/login', cors.corsWithOptions, (req, res, next) => {
