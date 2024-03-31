@@ -1,7 +1,7 @@
 import * as ActionTypes from './ActionTypes';
 
-//const url='https://backend2-cwxf.onrender.com/api/'
-const url="http://localhost:3446/api/"
+const url='https://backend2-cwxf.onrender.com/api/'
+//const url="http://localhost:3446/api/"
 
 
 //  ***************************** comment crud operations starts here ******************************************************************************************************************************************
