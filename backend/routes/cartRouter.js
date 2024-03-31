@@ -31,6 +31,7 @@ cartRouter.route('/')
     .catch((err) => next(err));
 })
 .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+    console.log(req.body)
     Carts.findOne({user: req.user._id})
     .then((cart) => {
         if (cart) {
@@ -41,7 +42,7 @@ cartRouter.route('/')
             }
             cart.save()
                         .then((cart) => {
-                            Carts.findById(favorite._id)
+                            Carts.findById(cart._id)
                                 .populate('user')
                                 .populate('dishes')
                                 .then((carts) => {
@@ -54,7 +55,7 @@ cartRouter.route('/')
         }
         else {
             Carts.create({"user": req.user._id, "dishes": req.body})
-            .then((favorite) => {
+            .then((cart) => {
                 Carts.findById(cart._id)
                                         .populate('user')
                                         .populate('dishes')

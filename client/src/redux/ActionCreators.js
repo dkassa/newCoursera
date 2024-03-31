@@ -1,8 +1,10 @@
 import * as ActionTypes from './ActionTypes';
 
-const url='https://backend2-cwxf.onrender.com/api/'
+//const url='https://backend2-cwxf.onrender.com/api/'
+const url="http://localhost:3446/api/"
 
 
+//  ***************************** comment crud operations starts here ******************************************************************************************************************************************
 
 export const addComment = (comment) => ({
     type: ActionTypes.ADD_COMMENT,
@@ -50,6 +52,8 @@ export const postComment = (dishId, rating, comment) => (dispatch) => {
         alert('Your comment could not be posted\nError: '+ error.message); })
 }
 
+// **********************************************************************************  crud operation on dishes here ************************************************************************************
+
 export const fetchDishes = () => (dispatch) => {
     dispatch(dishesLoading(true));
 
@@ -87,6 +91,8 @@ export const addDishes = (dishes) => ({
     payload: dishes
 });
 
+// ******************************************************************************** comments crud operations here *********************************************************************************
+
 export const fetchComments = () => (dispatch) => {
     return fetch(url + 'comments')
         .then(response => {
@@ -117,6 +123,9 @@ export const addComments = (comments) => ({
     type: ActionTypes.ADD_COMMENTS,
     payload: comments
 });
+
+
+// ***************************************************************************** promo crud operations here ******************************************************************************************
 
 export const fetchPromos = () => (dispatch) => {
     dispatch(promosLoading(true));
@@ -155,6 +164,9 @@ export const addPromos = (promos) => ({
     payload: promos
 });
 
+
+// ********************************************************************************  leaders crud operations here **********************************************************************************
+
 export const fetchLeaders = () => (dispatch) => {
     
     dispatch(leadersLoading());
@@ -192,6 +204,9 @@ export const addLeaders = (leaders) => ({
     payload: leaders
 });
 
+
+// ************************************************************************************** feedback crud operations starts here***************************************************************************8
+
 export const postFeedback = (feedback) => (dispatch) => {
         
     return fetch(url + 'feedback', {
@@ -218,6 +233,11 @@ export const postFeedback = (feedback) => (dispatch) => {
     .then(response => { console.log('Feedback', response); alert('Thank you for your feedback!\n'+JSON.stringify(response)); })
     .catch(error =>  { console.log('Feedback', error.message); alert('Your feedback could not be posted\nError: '+error.message); });
 };
+
+
+
+
+// ***************************************************************************************** login crud operations here *******************************************************************************
 
 export const requestLogin = (creds) => {
     return {
@@ -246,10 +266,11 @@ export const loginUser = (creds) => (dispatch) => {
 
     return fetch(url + 'users/login', {
         method: 'POST',
+        body: JSON.stringify(creds),
         headers: { 
             'Content-Type':'application/json' 
         },
-        body: JSON.stringify(creds)
+       
     })
     .then(response => {
         if (response.ok) {
@@ -302,6 +323,8 @@ export const logoutUser = () => (dispatch) => {
     dispatch(favoritesFailed("Error 401: Unauthorized"));
     dispatch(receiveLogout())
 }
+
+// ***************************************************************************************** favorite crud operations here **************************************************************************
 
 export const postFavorite = (dishId) => (dispatch) => {
 
@@ -405,7 +428,7 @@ export const addFavorites = (favorites) => ({
 });
 
 
-// signup
+// *********************************************************************************** signup crud operations here************************************************************************************
 
 export const addProfile = (user) => {
     return {
@@ -480,3 +503,82 @@ export const signupUser = (creds) => (dispatch) => {
         dispatch(Signupsucess(resp)))
     .catch(error => dispatch(signupError(error.message)))
 }; 
+
+
+// ******************************************************************************************* cart crud operations here********************************************************************************
+
+
+
+export const postCarts= (dishId) => (dispatch) => {
+
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(url + 'carts/' + dishId, {
+        method: "POST",
+        body: JSON.stringify({"_id": dishId}),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': bearer
+        },
+        credentials: "same-origin"
+    })
+    .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error('Error ' + response.status + ': ' + response.statusText);
+          error.response = response;
+          throw error;
+        }
+      },
+      error => {
+            throw error;
+      })
+    .then(response => response.json())
+    .then(carts => { console.log('cart Added', carts); dispatch(addCarts(carts)); })
+    .catch(error => dispatch(cartsFailed(error.message)));
+}
+
+export const fetchCarts = () => (dispatch) => {
+    dispatch(cartsLoading(true));
+
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(url + 'carts',{
+        headers: {
+            'Authorization': bearer
+        }
+
+    })
+        .then(response => {
+            if (response.ok) {
+                return response;
+            }
+            else {
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => {
+            var errmess = new Error(error.message);
+            throw errmess;
+        })
+        .then(response => response.json())
+        .then(carts => dispatch(addCarts(carts)))
+        .catch(error => dispatch(cartsFailed(error.message)));
+}
+
+export const cartsLoading = () => ({
+    type: ActionTypes.CARTS_LOADING
+});
+
+export const cartsFailed = (errmess) => ({
+    type: ActionTypes.CARTS_FAILED,
+    payload: errmess
+});
+
+export const addCarts = (carts) => ({
+    type: ActionTypes.ADD_CARTS,
+    payload: carts
+});

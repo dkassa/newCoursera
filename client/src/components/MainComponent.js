@@ -9,9 +9,10 @@ import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { postComment, postFeedback, fetchDishes, fetchComments, fetchPromos, fetchLeaders, loginUser, logoutUser, fetchFavorites, postFavorite, deleteFavorite, signupUser } from '../redux/ActionCreators';
+import { postComment, postFeedback, postCarts,fetchDishes, fetchComments, fetchPromos, fetchLeaders, loginUser, logoutUser, fetchFavorites, postFavorite, deleteFavorite, signupUser, fetchCarts } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import Carts from './CartComponent';
 
 const mapStateToProps = state => {
     return {
@@ -21,13 +22,16 @@ const mapStateToProps = state => {
       leaders: state.leaders,
       favorites: state.favorites,
       auth: state.auth,
-      Users: state.Users
+      Users: state.Users,
+      carts: state.carts
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   postComment: (dishId, rating, comment) => dispatch(postComment(dishId, rating, comment)),
   fetchDishes: () => {dispatch(fetchDishes())},
+  fetchCarts: ()=>{dispatch(fetchCarts())},
+  postCarts: (dishId)=>{dispatch(postCarts(dishId))},
   resetFeedbackForm: () => { dispatch(actions.reset('feedback'))},
   fetchComments: () => {dispatch(fetchComments())},
   fetchPromos: () => {dispatch(fetchPromos())},
@@ -49,6 +53,7 @@ class Main extends Component {
     this.props.fetchPromos();
     this.props.fetchLeaders();
     this.props.fetchFavorites();
+    this.props.fetchCarts()
   }
 
   render() {
@@ -80,16 +85,22 @@ class Main extends Component {
           postComment={this.props.postComment}
           //favorite={this.props.favorites.favorites.dishes && this.props.favorites.favorites.dishes.some((dish) => dish._id === match.params.dishId)}
           postFavorite={this.props.postFavorite}
+          user={this.props.auth}
+          postCarts={this.props.postCarts}
           />
         :
         <DishDetail dish={this.props.dishes.dishes.filter((dish) => dish._id === match.params.dishId)[0]}
           isLoading={this.props.dishes.isLoading}
           errMess={this.props.dishes.errMess}
+          iscartLoading={this.props.carts.isLoading}
+          
           comments={this.props.comments.comments.filter((comment) => comment.dish === match.params.dishId)}
           commentsErrMess={this.props.comments.errMess}
           postComment={this.props.postComment}
           favorite={false}
           postFavorite={this.props.postFavorite}
+          postCarts={this.props.postCarts}
+        
           />
       );
     }
@@ -116,6 +127,7 @@ class Main extends Component {
           <CSSTransition key={this.props.location.key} classNames="page" timeout={300}>
             <Switch>
               <Route path="/home" component={HomePage} />
+              <Route path="/cart" component={()=><Carts carts={this.props.carts}/>}/>
               <Route exact path='/aboutus' component={() => <About leaders={this.props.leaders} />} />
               <Route exact path="/menu" component={() => <Menu dishes={this.props.dishes} />} />
               <Route path="/menu/:dishId" component={DishWithId} />

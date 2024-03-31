@@ -5,6 +5,7 @@ import { Comments } from './comments';
 import { Promotions } from './promotions';
 import { Leaders } from './leaders';
 import { Users } from './users';
+import {Carts} from './cart'
 import { favorites } from './favorites';
 import { Auth } from './auth';
 import thunk from 'redux-thunk';
@@ -19,6 +20,7 @@ export const ConfigureStore = () => {
             promotions: Promotions,
             leaders: Leaders,
             auth: Auth,
+            carts: Carts,
             users: Users,
             favorites,
             ...createForms({

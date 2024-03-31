@@ -7,8 +7,9 @@ import { Control, LocalForm } from 'react-redux-form';
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
 import { FadeTransform, Fade, Stagger } from 'react-animation-components';
+import { postCarts } from '../redux/ActionCreators';
 
-    function RenderDish({dish, favorite, postFavorite}) {
+    function RenderDish({dish ,favorite, postCarts, postFavorite}) {
             return(
                 <div className="col-12 col-md-5 m-1">
                     <FadeTransform in 
@@ -29,8 +30,11 @@ import { FadeTransform, Fade, Stagger } from 'react-animation-components';
                             <CardBody>
                                 <CardTitle>{dish.name}</CardTitle>
                                 <CardText>{dish.description}</CardText>
+                               
                             </CardBody>
+                            
                         </Card>
+                        <Button onClick={()=>postCarts(dish._id)}>AddToCart</Button>
                     </FadeTransform>
                 </div>
             );
@@ -131,6 +135,8 @@ import { FadeTransform, Fade, Stagger } from 'react-animation-components';
     }
 
     const DishDetail = (props) => {
+
+        console.log(props)
         if (props.isLoading) {
             return(
                 <div className="container">
@@ -163,11 +169,12 @@ import { FadeTransform, Fade, Stagger } from 'react-animation-components';
                         </div>
                     </div>
                     <div className="row">
-                        <RenderDish dish={props.dish} favorite={props.favorite} postFavorite={props.postFavorite} />
+                        <RenderDish dish={props.dish} dishId={props.dish._id} favorite={props.favorite}  postCarts={props.postCarts} postFavorite={props.postFavorite} />
                         <RenderComments comments={props.comments}
                             postComment={props.postComment}
                             dishId={props.dish._id} />
                     </div>
+                  
                 </div>
             );
         else
