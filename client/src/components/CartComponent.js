@@ -76,7 +76,7 @@ const Carts = (props) => {
         return(
             <div className="container">
                 <div className="row">
-                    <h4>You have no favorites</h4>
+                    <h4>You have no carts</h4>
                 </div>
             </div>
         )
